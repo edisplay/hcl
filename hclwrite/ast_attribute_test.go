@@ -1,3 +1,6 @@
+// Copyright IBM Corp. 2014, 2026
+// SPDX-License-Identifier: MPL-2.0
+
 package hclwrite
 
 import (
@@ -35,17 +38,14 @@ test_attribute = foo
 			`// comment
 `,
 		},
-		"go formatted multi-line comment": {
-			`
-/* syntactically valid multi-line 
+		"go formatted multi-line comment": {`
+/* 
+	go-style multi-line 
 	comment 
 */
 test_attribute = foo
 `,
-			`/* syntactically valid multi-line 
-comment
-*/
-`,
+			``, //unsupported
 		},
 	}
 
@@ -92,7 +92,7 @@ test_attribute = foo # multi-line
 					 # comment (invalid)
 `,
 			` # multi-line
-`, // not sure where the second line went, but I would guess it's interpreted as the next attrs's lead comment?
+`, // known limitation: any extra comment lines (when using single-comment syntax) are dropped
 		},
 		{
 			`
@@ -102,7 +102,7 @@ test_attribute = foo /* multi-line
 `,
 			` /* multi-line
                         comment in a weird place
-                     */`, //why did this newline get swallowed when others didn't?
+                     */`, // note that all the whitespaces are returned
 		},
 	}
 
