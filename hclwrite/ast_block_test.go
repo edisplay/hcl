@@ -487,3 +487,5 @@ func TestBlockSetLabels(t *testing.T) {
 		})
 	}
 }
+
+func TestBlockLineComments(t *testing.T) {}
