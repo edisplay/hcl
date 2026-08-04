@@ -138,7 +138,7 @@ blank "" {
 	}
 }
 
-func TestBlockSetType(t *testing.T) {
+func TestBlockSetType_buildTokens(t *testing.T) {
 	tests := []struct {
 		src         string
 		oldTypeName string
@@ -195,6 +195,27 @@ func TestBlockSetType(t *testing.T) {
 				t.Errorf("wrong result\ngot:  %s\nwant: %s\ndiff:\n%s", spew.Sdump(got), spew.Sdump(test.want), diff)
 			}
 		})
+	}
+}
+
+func TestBlockSetType(t *testing.T) {
+	tests := []struct {
+		oldTypeName string
+		newTypeName string
+	}{
+		{
+			"foo",
+			"bar",
+		},
+	}
+
+	for _, test := range tests {
+		b := NewBlock(test.oldTypeName, nil)
+		b.SetType(test.newTypeName)
+
+		if b.Type() != test.newTypeName {
+			t.Errorf("wrong result\ngot: %s\nwant: %s\n", b.Type(), test.newTypeName)
+		}
 	}
 }
 
