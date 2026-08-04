@@ -71,8 +71,8 @@ func (b *Block) Body() *Body {
 	return b.body.content.(*Body)
 }
 
-func (a *Block) LeadComments() Tokens {
-	return a.leadComments.content.BuildTokens(nil)
+func (b *Block) LeadComments() Tokens {
+	return b.leadComments.content.BuildTokens(nil)
 }
 
 // Type returns the type name of the block.
