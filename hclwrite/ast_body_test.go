@@ -787,7 +787,7 @@ func TestBodySetAttributeTraversal_ReturnsTheAttribute(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			f := must[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
+			f := testFn[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
 
 			traversal := hcl.Traversal{
 				hcl.TraverseRoot{Name: "the"},
@@ -989,7 +989,7 @@ func TestBodySetAttributeRaw_ReturnsTheAttribute(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			f := must[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
+			f := testFn[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
 
 			attr := f.Body().SetAttributeRaw(`one`, TokensForValue(cty.StringVal("the loneliest number")))
 			if attr == nil {
@@ -1020,7 +1020,7 @@ func TestBodySetAttributeValue_ReturnsTheAttribute(t *testing.T) {
 
 	for name, test := range tests {
 		t.Run(name, func(t *testing.T) {
-			f := must[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
+			f := testFn[*File](t)(ParseConfig([]byte(test.config), "", hcl.Pos{Line: 1, Column: 1}))
 
 			attr := f.Body().SetAttributeValue(`one`, cty.StringVal("the loneliest number"))
 			if attr == nil {
@@ -1857,12 +1857,12 @@ bar {}
 
 }
 
-// must is a convenience function that wraps a function call that returns a
+// testFn is a convenience function that wraps a function call that returns a
 // value and diagnostics.
 //
 // If there are no diagnostics, returns the value.
 // If there are diagnostics, fails the test.
-func must[E any](t *testing.T) func(value E, diags hcl.Diagnostics) E {
+func testFn[E any](t *testing.T) func(value E, diags hcl.Diagnostics) E {
 	t.Helper()
 
 	return func(value E, diags hcl.Diagnostics) E {
