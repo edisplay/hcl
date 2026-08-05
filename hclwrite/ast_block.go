@@ -1,4 +1,4 @@
-// Copyright IBM Corp. 2014, 2025
+// Copyright IBM Corp. 2014, 2026
 // SPDX-License-Identifier: MPL-2.0
 
 package hclwrite
@@ -69,6 +69,10 @@ func (b *Block) init(typeName string, labels []string) {
 // tokens that are generated between the blocks open and close braces.
 func (b *Block) Body() *Body {
 	return b.body.content.(*Body)
+}
+
+func (b *Block) LeadComments() Tokens {
+	return b.leadComments.content.BuildTokens(nil)
 }
 
 // Type returns the type name of the block.
