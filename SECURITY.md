@@ -31,30 +31,36 @@ integrator-supplied functions and variables are capable of doing.
 
 ## Integrator Responsibilities
 
-All capability available to an HCL expression is supplied by the integrator through the
-evaluation context: the functions it can call, the variables it can read, and the data
-it can access. HCL imposes no restrictions on what those functions do once registered.
-The integrator is the primary security control for any HCL-based system.
+The integrator controls what untrusted input HCL is asked to process: the source text
+passed to the parser, the variables and functions made available during evaluation, and
+the data flowing through both. HCL imposes no restrictions on any of these once they are
+provided. The integrator is therefore the primary security control for any HCL-based
+system.
 
 ### Principle of least privilege
 
 Expose only the functions and variables needed for the configuration's intended purpose.
 Do not expose general-purpose utilities that could be chained into unintended behavior.
-The smaller the surface area of the evaluation context, the smaller the impact of a
+The smaller the surface area presented to untrusted input, the smaller the impact of a
 malicious or malformed configuration.
 
 ### Input validation
 
-Any value sourced from an untrusted origin that is placed into the evaluation context
-must be validated and sanitized before use. The evaluator operates on the values it is
-given without additional checks; ensuring those values are safe is the integrator's
-responsibility.
+Untrusted input passed to HCL, whether as configuration source text or as values
+supplied during evaluation, must be validated and sanitized before use. HCL operates on
+what it is given without additional checks; ensuring that input is safe is the
+integrator's responsibility.
+
+HCL provides no stack overflow protection. Deeply nested expressions or structures in
+untrusted configuration source can exhaust the call stack and crash the process.
+Integrators that accept configuration from untrusted sources should enforce limits on
+input size and structural depth before passing it to HCL.
 
 ### Privileged configuration and optional extensions
 
 HCL includes optional extensions that significantly expand what a configuration can
 express, including user-defined functions and dynamic block generation. These extensions
-should only be enabled for **privileged configuration**: configuration that is fully
-controlled by the integrator or a trusted operator. They should not be enabled for
+should only be enabled for **privileged configuration**: configuration source that is
+fully controlled by the integrator or a trusted operator. They should not be enabled for
 end-user-supplied input unless strong, independent controls are in place that bound what
 a user can do.
